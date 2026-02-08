@@ -1,0 +1,22 @@
+ select cst_id ,count(*)
+from silver.crm_cust_info
+group by  cst_id 
+having count(*) >1
+
+
+--check  for unwanted spces in firstname string values
+ select  cst_firstname from silver.crm_cust_info
+ where cst_firstname !=trim(cst_firstname);
+
+ --check  for unwanted spces in lastname string values
+ select cst_lastname from silver.crm_cust_info
+ where cst_lastname !=trim(cst_lastname);
+
+  --check  for unwanted spces in marital status string values
+
+  select cst_marital_status from silver.crm_cust_info
+  where cst_marital_status != trim(cst_marital_status);
+
+   --check  for unwanted spces in cst_gndr string values
+   select cst_gndr from silver.crm_cust_info
+   where cst_gndr !=trim(cst_gndr);
