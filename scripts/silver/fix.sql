@@ -109,6 +109,27 @@ INSERT INTO silver.crm_sales_details (
 			END AS sls_price
 		FROM bronze.crm_sales_details;
 
+insert into silver.erp_cust_az12(
+cid,
+bdate,
+gen)
+select 
+case 
+when cid like 'NAS%' then substring(cid,4,len(cid))
+else cid
+end as cid_,
+case
+when bdate > getdate() then null
+else bdate
+end as bdate,
+case
+when upper(trim(GEN)) IN ('M' ,'MALE') THEN 'MALE'
+WHEN UPPER(TRIM(GEN)) IN ('F' ,'FEMALE') THEN 'FEMALE'
+ELSE 'N/A'
+END AS GEN
+from bronze.erp_cust_az12;
+
+
 
 
 
