@@ -37,6 +37,8 @@ where (cust_rank_by_date = 1 and cst_id is not null);
 
 
 
+
+
 --inserting the data in silver.crm_prd_info
 
 INSERT INTO silver.crm_prd_info(
@@ -66,6 +68,8 @@ INSERT INTO silver.crm_prd_info(
  cast(prd_start_dt as date) as prd_start_dt,
  cast(lead(prd_start_dt) over(partition by prd_key order by prd_start_dt)-1 as date) prd_end_dt
  from bronze.crm_prd_info;
+
+
 
 
 
@@ -109,6 +113,13 @@ INSERT INTO silver.crm_sales_details (
 			END AS sls_price
 		FROM bronze.crm_sales_details;
 
+
+
+
+
+
+
+
 insert into silver.erp_cust_az12(
 cid,
 bdate,
@@ -128,6 +139,37 @@ WHEN UPPER(TRIM(GEN)) IN ('F' ,'FEMALE') THEN 'FEMALE'
 ELSE 'N/A'
 END AS GEN
 from bronze.erp_cust_az12;
+
+
+
+
+
+
+
+insert into silver.erp_loc_a101(
+cid,
+cntry
+)
+SELECT 
+REPLACE(cid,'-','') as cid,
+case 
+ when trim(cntry) = 'DE' then 'Germany'
+ when trim(cntry) in ('US','USA') then 'United States'
+ when trim(cntry) = '' or cntry is null then 'n/a'
+ else trim(cntry)
+end as cntry
+FROM bronze.erp_loc_a101;
+
+
+
+
+insert into silver.erp_px_cat_g1v2(
+id,
+cat,
+subcat,
+maintenance)
+select *
+from bronze.erp_px_cat_g1v2;
 
 
 
